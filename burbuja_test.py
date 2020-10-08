@@ -20,7 +20,7 @@ def _graficar(fitted, titulo):
         if isinstance(k, big_o.complexities.ComplexityClass):
             residual = v
             r2 = 1 - residual / (ys.size * ys.var())
-            print(k, f' (r={residual}, r^2={r2})')
+            print(k, f'(r={residual}, r^2={r2})')
 
 
 def _comparar_curvas(fitted_a, fitted_b):
@@ -35,9 +35,22 @@ def _comparar_curvas(fitted_a, fitted_b):
 def generar_aleatorio(n):
     A = list(range(0, n))
     shuffle(A)
-
     return A
 
+def generar_mejor(n):
+    A = list(range(0,n))
+    for i in range(0,n):
+       A[i] = i + 5
+    return A
+
+def generar_peor(n):
+    A = generar_mejor(n)
+    A.reverse
+    return A
+
+def generar_promedio(n):
+    A = generar_aleatorio(n)
+    return A
 
 class PruebasBurbuja(unittest.TestCase):
 
@@ -82,12 +95,28 @@ class PruebasBurbuja(unittest.TestCase):
 
 
     def test_mejor_caso(self):
-        self.fail('Pendiente de implementar')
+        print()
+        best, fitted = big_o.big_o(burbuja_optimizado, generar_mejor, min_n=10, max_n=1000,
+                                   n_measures=100, n_repeats=3, verbose=False,
+                                   classes=[cmpl.Linear, cmpl.Quadratic], return_raw_data=True)
+
+        _graficar(fitted, '--TEST MEJOR CASO--')
+       
 
 
     def test_peor_caso(self):
-        self.fail('Pendiente de implementar')
+        print()
+        best, fitted = big_o.big_o(burbuja_optimizado, generar_peor, min_n=10, max_n=1000,
+                                   n_measures=100, n_repeats=3, verbose=False,
+                                   classes=[cmpl.Linear, cmpl.Quadratic], return_raw_data=True)
+
+        _graficar(fitted, '--TEST PEOR CASO--')
 
 
     def test_caso_promedio(self):
-        self.fail('Pendiente de implementar')
+        print()
+        best, fitted = big_o.big_o(burbuja_optimizado, generar_promedio, min_n=10, max_n=1000,
+                                   n_measures=100, n_repeats=3, verbose=False,
+                                   classes=[cmpl.Linear, cmpl.Quadratic], return_raw_data=True)
+
+        _graficar(fitted, '--TEST CASO PROMEDIO--')
